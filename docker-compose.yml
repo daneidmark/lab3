@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0.26
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=lab1
+    ports:
+      - "3306:3306"
+  lab2:
+    image: daneidmark/bank:0.0.1
+    environment:
+      - MYSQL_HOST=mysql
+    ports:
+      - "8080:8080"
+    links:
+      - mysql
