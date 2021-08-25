@@ -25,7 +25,7 @@ Börja med att lägga till risktjänsten i din `docker-compose.yml` dess image n
 
 Använd det exponerade swagger UIt för att lista ut hur risktjänsten fungerar.
 Swagger är ett verktyg för att dokumentera APIer. Om du vill kan du lägga till det i din tjänst men det är inget krav. Det du bör göra är att läsa lite om det, men framförallt använda dig av UIt för att lista ut hur risktjänsten fungerar.
-Om du mappade om porten till `8082` kan du nu hitta swagger på `http://localhost:8082/swagger-ui`. Klicka runt och testa lite anrop
+Om du mappade om porten till `8082` kan du nu hitta swagger på `http://localhost:8082/swagger-ui/`. Klicka runt och testa lite anrop
 
 # Del 2: Integrera mot tjänsten
 Skapa en `Adapter` som gör det externa anropet. Fördelen med en adapter är att vi kan mocka den i våra enhetstest samt att vi kan byta up hur vi för riskbedömningar utan att anropande kod vet om det.
