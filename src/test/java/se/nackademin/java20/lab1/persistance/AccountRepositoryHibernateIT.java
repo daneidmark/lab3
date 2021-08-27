@@ -15,6 +15,7 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.nackademin.java20.lab1.domain.Account;
+import se.nackademin.java20.lab1.persistance.AccountRepositoryHibernate;
 
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
-@ContextConfiguration(initializers = AccountRepositoryHibernateIT.Lab1ApplicationTestsContextInitializer.class)
+@ContextConfiguration(initializers = se.nackademin.java20.lab1.persistance.AccountRepositoryHibernateIT.Lab1ApplicationTestsContextInitializer.class)
 class AccountRepositoryHibernateIT {
 
     @Container
@@ -36,9 +37,11 @@ class AccountRepositoryHibernateIT {
 
     @Test
     void shouldSaveAndFindFromTheDatabase() {
-        AccountRepositoryHibernate accountRepositoryHibernate = new AccountRepositoryHibernate(testEntityManager.getEntityManager());
-
-        //TODO
+        final AccountRepositoryHibernate repositoryHibernate = new AccountRepositoryHibernate(testEntityManager.getEntityManager());
+        final Account account = repositoryHibernate.save(new Account("Dan", 10));
+        final Optional<Account> actual = repositoryHibernate.findByUserIdAndAccountId(account.getHolder(), account.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get().getId(), account.getId());
     }
 
     public static class Lab1ApplicationTestsContextInitializer

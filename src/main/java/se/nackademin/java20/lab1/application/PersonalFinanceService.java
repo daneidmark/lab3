@@ -2,19 +2,26 @@ package se.nackademin.java20.lab1.application;
 
 import se.nackademin.java20.lab1.domain.Account;
 import se.nackademin.java20.lab1.domain.AccountRepository;
+import se.nackademin.java20.lab1.domain.RiskAssesment;
 
 import javax.transaction.Transactional;
 
 public class PersonalFinanceService {
     private final AccountRepository accountRepository;
+    private final RiskAssesment riskAssesment;
 
-    public PersonalFinanceService(AccountRepository accountRepository) {
+    public PersonalFinanceService(AccountRepository accountRepository, RiskAssesment riskAssesment) {
         this.accountRepository = accountRepository;
+        this.riskAssesment = riskAssesment;
     }
 
     @Transactional
     public Account openAccount(String holder) {
-        return accountRepository.save(new Account(holder, 0));
+        if(riskAssesment.isPassingCreditCheck(holder)) {
+            return accountRepository.save(new Account(holder, 0));
+        } else {
+            throw new RuntimeException("Could not open account due to failing risk assessment");
+        }
     }
 
     @Transactional
