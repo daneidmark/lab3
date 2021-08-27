@@ -41,6 +41,8 @@ Börja med att skapa ett testfall som använder RestTemplate för att nå tjäns
    1. restTemplate.getForEntity("http://localhost:8082/risk/dan", RiskAssessmentDto.class);
    2. Försök att använda Jackson och deserialisera svaret
 
+Det finns lite inspiration att hitta från detta exempel: https://github.com/daneidmark/rest/tree/master/regeringen
+
 Därefter få detta att fungera i den stora appen. Skapa en `Adapter` som gör det externa anropet. Fördelen med en adapter är att vi kan mocka den i våra enhetstest samt att vi kan byta up hur vi för riskbedömningar utan att anropande kod vet om det.
 `Adapter Pattern` är händigt om du vill kapsla in något och vi använder det ofta till externa tjänster eller saker med sidoeffekter. 
 
