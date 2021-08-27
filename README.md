@@ -23,12 +23,25 @@ Efter slutförd lab ska din applikation kunna:
 # Del 1: Utforska risktjänsten med hjälp av swagger
 Börja med att lägga till risktjänsten i din `docker-compose.yml` dess image namn är `daneidmark/risk:0.0.1` och har ingen konfiguration. Den exponerar porten `8080`så du behöver mappa om den till en fri port, tex `8082` går bra så länge den är fri.
 
+Om du inte vill börja med docker-compose kan du alltid börja med att bara starta den är det ok börja då med 
+1. docker run --rm -p"8082:8080" --name risk -t daneidmark/risk:0.0.1
+2. Då går den att nås via `http://localhost:8082/swagger-ui/`
+3. Du kan börja integrera med den
+
 Använd det exponerade swagger UIt för att lista ut hur risktjänsten fungerar.
 Swagger är ett verktyg för att dokumentera APIer. Om du vill kan du lägga till det i din tjänst men det är inget krav. Det du bör göra är att läsa lite om det, men framförallt använda dig av UIt för att lista ut hur risktjänsten fungerar.
 Om du mappade om porten till `8082` kan du nu hitta swagger på `http://localhost:8082/swagger-ui/`. Klicka runt och testa lite anrop
 
 # Del 2: Integrera mot tjänsten
-Skapa en `Adapter` som gör det externa anropet. Fördelen med en adapter är att vi kan mocka den i våra enhetstest samt att vi kan byta up hur vi för riskbedömningar utan att anropande kod vet om det.
+Börja med att skapa ett testfall som använder RestTemplate för att nå tjänsten
+1. Se till att du kan ta emot allt som en String
+   1. restTemplate.getForEntity("http://localhost:8082/risk/dan", String);
+   2. titta på vad du får tillbaka
+2. Se till att du kan deserialisera json till ett java objekt
+   1. restTemplate.getForEntity("http://localhost:8082/risk/dan", RiskAssessmentDto.class);
+   2. Försök att använda Jackson och deserialisera svaret
+
+Därefter få detta att fungera i den stora appen. Skapa en `Adapter` som gör det externa anropet. Fördelen med en adapter är att vi kan mocka den i våra enhetstest samt att vi kan byta up hur vi för riskbedömningar utan att anropande kod vet om det.
 `Adapter Pattern` är händigt om du vill kapsla in något och vi använder det ofta till externa tjänster eller saker med sidoeffekter. 
 
 Skapa ett interface i ditt domänlager som uttrycker hur du vill jobba med riskbedömningar. Tex, vilken data vill du tillhandahålla? hur vill du har resultatet? 
